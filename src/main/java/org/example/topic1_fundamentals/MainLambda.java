@@ -16,4 +16,28 @@ package org.example.topic1_fundamentals;
  */
 
 public class MainLambda {
+
+    public static void main(String[] args) {
+
+        Runnable meuRunabble = () -> {
+            for (int i = 1; i <= 10; i++){
+                String nomeThread = Thread.currentThread().getName();
+                System.out.println("Número: " + i + " - Thread: " + nomeThread);
+                sleep();
+            }
+
+        };
+
+        Thread thread = new Thread(meuRunabble);
+
+        thread.start();
+    }
+
+    public static void sleep() {
+        try {
+            Thread.sleep(100);
+        } catch (InterruptedException e) {
+            System.out.println(e);
+        }
+    }
 }
