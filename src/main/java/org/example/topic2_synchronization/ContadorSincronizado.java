@@ -29,8 +29,6 @@ public class ContadorSincronizado{
 
     public int contador = 0;
 
-    public static List<Thread> threads = new ArrayList<>(10);
-
     Runnable implementar = () -> {
         for(int i = 0; i < 1000; i++){
             synchronized (this){
@@ -40,6 +38,8 @@ public class ContadorSincronizado{
     };
 
     public static void main(String[] args){
+
+        List<Thread> threads = new ArrayList<>(10);
 
         ContadorSincronizado contadorSincronizado = new ContadorSincronizado();
 
