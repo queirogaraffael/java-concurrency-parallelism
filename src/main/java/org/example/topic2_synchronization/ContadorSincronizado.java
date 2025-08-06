@@ -1,5 +1,8 @@
 package org.example.topic2_synchronization;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Exercício 2.1 e 2.2: Condição de Corrida e Synchronized
  *
@@ -10,8 +13,7 @@ package org.example.topic2_synchronization;
  * 2. Crie um método `incrementar()` que faz `contador++`.
  * 3. Crie uma classe `Main` que:
  * a. Instancia o `ContadorSincronizado`.
- * b. Cria e inicia 10 threads. Cada thread deve chamar o método `incrementar()`
- * 1.000 vezes em um loop.
+ * b. Cria e inicia 10 threads. Cada thread deve chamar o método `incrementar()` 1.000 vezes em um loop.
  * c. Espera todas as threads terminarem (usando `join()`).
  * d. Imprime o valor final do `contador`.
  *
@@ -23,5 +25,44 @@ package org.example.topic2_synchronization;
  * se o resultado é sempre 10.000.
  */
 
-public class ContadorSincronizado {
+public class ContadorSincronizado{
+
+    public int contador = 0;
+
+    public static List<Thread> threads = new ArrayList<>(10);
+
+    Runnable implementar = () -> {
+        for(int i = 0; i < 1000; i++){
+            synchronized (this){
+                contador++;
+            }
+        }
+    };
+
+    public static void main(String[] args){
+
+        ContadorSincronizado contadorSincronizado = new ContadorSincronizado();
+
+        for(int i = 0; i < 10 ; i++){
+            threads.add(new Thread(contadorSincronizado.implementar));
+        }
+
+        for (int i = 0; i < threads.size(); i++) {
+            threads.get(i).start();
+        }
+
+        for (int i = 0; i < threads.size(); i++) {
+            try {
+                threads.get(i).join();
+            } catch (InterruptedException e) {
+                System.out.println(e);
+            }
+        }
+
+        System.out.println("Valor final do contador: " + contadorSincronizado.getContador());
+    }
+
+    public int getContador() {
+        return contador;
+    }
 }
