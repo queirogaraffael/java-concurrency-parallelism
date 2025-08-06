@@ -1,11 +1,14 @@
 package org.example.topic1_fundamentals;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Exercício 1.2 e 1.3: Múltiplas Threads e Sincronização com join()
- *
+ * <p>
  * Objetivo: Criar e iniciar múltiplas threads e garantir que a thread principal
  * espere pela finalização de todas elas.
- *
+ * <p>
  * Passos:
  * 1. Crie uma classe `MainMultiThread` com o método `main`.
  * 2. Dentro do `main`, crie um array ou lista para armazenar 5 Threads.
@@ -18,4 +21,28 @@ package org.example.topic1_fundamentals;
  */
 
 public class MainMultiThread {
+
+    public static void main(String[] args) {
+
+        List<Thread> threads = new ArrayList<>(5);
+
+        for (int i = 0; i < 5; i++) {
+            threads.add(new Thread(new ContadorRunnable()));
+        }
+
+        for (int i = 0; i < 5; i++) {
+            threads.get(i).start();
+        }
+
+        for (int i = 0; i < 5; i++) {
+            try {
+                threads.get(i).join();
+            } catch (InterruptedException e) {
+                System.out.println(e);
+            }
+        }
+
+        System.out.println("Fim do programa.");
+    }
+
 }

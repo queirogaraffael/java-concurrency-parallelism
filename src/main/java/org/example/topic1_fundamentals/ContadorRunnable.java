@@ -16,26 +16,23 @@ package org.example.topic1_fundamentals;
  * 6. Lembre-se de tratar a `InterruptedException` com um bloco try-catch.
  */
 
-public class ContadorRunnable {
+public class ContadorRunnable implements Runnable {
 
     public static void main(String[] args) {
 
-        MeuRunabble meuRunabble = new MeuRunabble();
+        ContadorRunnable contadorRunnable = new ContadorRunnable();
 
-        Thread thread = new Thread(meuRunabble);
+        Thread thread = new Thread(contadorRunnable);
 
         thread.start();
     }
 
-    public static class MeuRunabble implements Runnable {
-        @Override
-        public void run() {
-            for (int i = 1; i <= 10; i++){
-                String nomeThread = Thread.currentThread().getName();
-                System.out.println("Número: " + i + " - Thread: " + nomeThread);
-                sleep();
-            }
-
+    @Override
+    public void run() {
+        for (int i = 1; i <= 10; i++){
+            String nomeThread = Thread.currentThread().getName();
+            System.out.println("Número: " + i + " - Thread: " + nomeThread);
+            sleep();
         }
     }
 
