@@ -1,6 +1,12 @@
 package org.example.topic5_producerconsumer;
 
 
+import java.util.Random;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.LinkedBlockingQueue;
+
 /*
  * Objetivo: Implementar o padrão usando BlockingQueue e depois SynchronousQueue.
  *
@@ -21,4 +27,71 @@ package org.example.topic5_producerconsumer;
  *
  */
 public class ArmazemBlockingQueue {
+
+    // o put e o take so bloqueariam se usasse a capacidade maxima
+    private static final BlockingQueue<Integer> FILA = new LinkedBlockingQueue<>(5);
+
+    public static void main(String[] args) {
+
+        ExecutorService executor = Executors.newCachedThreadPool();
+
+        Random random = new Random();
+
+        Runnable produtor = () -> {
+
+            while (true) {
+                int numero = random.nextInt();
+                put(numero);
+                System.out.println("Produtor: "+ numero);
+
+                sleep(2);
+
+            }
+
+        };
+
+        Runnable consumidor = () -> {
+            while (true) {
+                int numero = take();
+                System.out.println("Consumidor " + numero);
+                sleep(2);
+            }
+        };
+
+        executor.submit(produtor);
+        executor.submit(consumidor);
+
+        executor.shutdown();
+
+
+    }
+
+    private static Integer take() {
+        try {
+            return FILA.take();
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    private static void put(int numero) {
+        try {
+            FILA.put(numero);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            e.printStackTrace();
+        }
+    }
+
+    private static void sleep(int segundos) {
+        try {
+            Thread.sleep(segundos * 1000L);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            System.err.println(e.getMessage());
+        }
+    }
+
 }
