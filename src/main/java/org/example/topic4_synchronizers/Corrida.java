@@ -1,10 +1,14 @@
 package org.example.topic4_synchronizers;
 
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 /**
  * Exercício 4.2: CountDownLatch
- *
+ * <p>
  * Objetivo: Sincronizar o início de várias threads, que devem esperar por um sinal para começar.
- *
+ * <p>
  * Passos:
  * 1. Crie uma classe `Corrida` com um `CountDownLatch` inicializado em 1.
  * 2. Crie uma `Runnable` que representa um corredor. No método `run()`:
@@ -20,4 +24,60 @@ package org.example.topic4_synchronizers;
  * f. Desligue o executor.
  */
 public class Corrida {
+
+    public static final CountDownLatch latch = new CountDownLatch(1);
+
+
+    public static void main(String[] args) {
+
+        Runnable corredor = () -> {
+            System.out.println(Thread.currentThread().getName() + " está pronta");
+            await();
+            System.out.println(Thread.currentThread().getName() + " começou a correr");
+
+        };
+
+        ExecutorService executor = null;
+
+        try {
+            executor = Executors.newFixedThreadPool(5);
+
+            for (int i = 0; i < 5; i++) {
+                executor.submit(corredor);
+            }
+
+            System.out.println("A corrida vai começar em 3 segundos...");
+            sleep(3);
+
+            latch.countDown();
+
+            sleep(5);
+
+            System.out.println("Fim da corrida");
+
+
+        } finally {
+            if (executor != null) {
+                executor.shutdown();
+            }
+        }
+    }
+
+    private static void await() {
+        try {
+            latch.await();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void sleep(int seconds) {
+        try {
+            Thread.sleep(seconds * 1000L);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            System.err.println(e.getMessage());
+        }
+    }
+
 }

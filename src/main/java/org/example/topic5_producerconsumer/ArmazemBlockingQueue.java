@@ -1,7 +1,7 @@
 package org.example.topic5_producerconsumer;
-/**
- * Exercício 5.1 e 5.2: Padrão Produtor-Consumidor
- *
+
+
+/*
  * Objetivo: Implementar o padrão usando BlockingQueue e depois SynchronousQueue.
  *
  * -----
@@ -19,12 +19,6 @@ package org.example.topic5_producerconsumer;
  * c. Espera um tempo.
  * 4. Na `main`, inicie uma thread para o produtor e uma para o consumidor.
  *
- * -----
- * Exercício 5.2 (SynchronousQueue):
- * Passos:
- * 1. Troque a `LinkedBlockingQueue` por uma `SynchronousQueue`.
- * 2. Execute novamente. Observe e explique o comportamento: o produtor agora
- * bloqueia até que o consumidor esteja pronto para receber o item.
  */
-public class Armazem {
+public class ArmazemBlockingQueue {
 }
